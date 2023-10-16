@@ -1,6 +1,6 @@
 # Code Assignment
 
-The tasks include topics that are important to us. Even if you only have answers to part of the exercises, it's already a starting point in the!
+The tasks include topics that are important to us. Even if you only have answers to part of the exercises, it's already a starting point!
 
 ## Tasks
 

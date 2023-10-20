@@ -1,3 +1,5 @@
+// REFACTORED CODE BELOW
+
 // data.service.ts
 @Injectable({ providedIn: 'root' })
 export class dataService {
@@ -15,18 +17,14 @@ export class dataService {
   standalone: true,
   imports: [NgIf, NgFor, AsyncPipe],
   template: `
-    <h1>
-      data
-      <ng-container *ngIf="data$ | async as data">
-        ({{ data.length }})
-      </ng-container>
-    </h1>
-
-    <ul>
-      <li *ngFor="let Data of data$ | async">
-        {{ Data.title }}
-      </li>
-    </ul>
+    <ng-container *ngIf="data$ | async as data">
+      <h1>{{ data.length }}</h1>
+      <ul>
+        <li *ngFor="let Data of data">
+          {{ Data.title }}
+        </li>
+      </ul>
+    </ng-container>
   `
 })
 export class dataComponent {

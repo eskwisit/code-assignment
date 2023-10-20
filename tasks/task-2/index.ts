@@ -1,39 +1,50 @@
+// See code with TypeScript strict mode and Angular strict templates, also refactored to be more PerformanceTiming
+
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 @Component({
   selector: 'user-list',
-  standalone: true,
-  imports: [NgIf, NgFor],
   template: `
     <h1>Users</h1>
 
     <section>
       <article
-        *ngFor="let user of users"
-        [class.selected]="user === getSelectedUser()"
+        *ngFor="let user of users; let i = index; trackBy: trackByUserId"
+        [class.selected]="user.id === selectedUserId"
         (click)="selectUser.emit(user.id)"
       >
-        <h3>{{ getFullName(user.firstName, user.lastName) }}</h3>
-	      <p>{{ user.email }}</p>
+        <h3>{{ getFullName(user) }}</h3>
+        <p>{{ user.email }}</p>
       </article>
 
-      <p *ngIf="getSelectedUser()">
+      <p *ngIf="selectedUser">
         Selected User Name:
-        {{ getFullName(getSelectedUser().firstName, getSelectedUser().lastName) }}
+        {{ getFullName(selectedUser) }}
       </p>
     </section>
   `,
 })
 export class UserListComponent {
-  @Input() users: any[];
-  @Input() selectedUserId: number | null;
-  @Output() selectUser = new EventEmitter();
+  @Input() users: User[] = [];
+  @Input() selectedUserId: number | null = null;
+  @Output() selectUser = new EventEmitter<number>();
 
-  getFullName(firstName: string, lastName: string): string {
-    return `${firstName} ${lastName}`;
+  trackByUserId(index: number, user: User): number {
+    return user.id;
   }
 
-  getSelectedUser() {
-    return this.selectedUserId
-      ? this.users.find((user) => user.id === this.selectedUserId)
-      : null;
+  getFullName(user: User): string {
+    return `${user.firstName} ${user.lastName || ''}`;
+  }
+
+  get selectedUser(): User | null {
+    return this.users.find((user) => user.id === this.selectedUserId) || null;
   }
 }
